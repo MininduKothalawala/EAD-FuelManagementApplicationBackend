@@ -30,7 +30,7 @@ namespace FuelManagementApplication.Repositories
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             var filter = Builders<Review>.Filter.Eq("Id", review.Id);
-            mongoClient.GetDatabase("FuelManagementDb").GetCollection<Review>("Review").DeleteOne(filter);
+            await mongoClient.GetDatabase("FuelManagementDb").GetCollection<Review>("Review").DeleteOneAsync(filter);
 
             return "Successfully Deleted";
         }
