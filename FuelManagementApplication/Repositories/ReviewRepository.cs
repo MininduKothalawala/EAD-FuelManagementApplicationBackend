@@ -63,7 +63,7 @@ namespace FuelManagementApplication.Repositories
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             var filter = Builders<Review>.Filter.Eq("Id", review.Id);
-            mongoClient.GetDatabase("FuelManagementDb").GetCollection<Review>("Review").ReplaceOne(filter, review);
+            await mongoClient.GetDatabase("FuelManagementDb").GetCollection<Review>("Review").ReplaceOneAsync(filter, review);
 
             return review;
         }
