@@ -1,5 +1,6 @@
 ﻿using FuelManagementApplication.IRepositories;
 using FuelManagementApplication.Models;
+using FuelManagementApplication.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,50 +22,104 @@ namespace FuelManagementApplication.Controllers
 
         [HttpGet]
         [Route("GetAllReviews")]
-        public IEnumerable<Review> GetAllReviews()
+        public IActionResult GetAllReviews()
         {
-            var reviews = reviewRepository.GetReviews();
-            return reviews;
+            try
+            {
+                var reviews = reviewRepository.GetReviews();
+                if (reviews == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpGet]
-        [Route("GetReviewsByReviewerId/{reviewerId}")]
-        public IEnumerable<Review> GetReviewsByReviewerId(Guid reviewerId)
+        [Route("GetReviewsByReviewerId")]
+        public IActionResult GetReviewsByReviewerId(Guid reviewerId)
         {
-            var reviews = reviewRepository.GetReviewsByReviewer(reviewerId);
-            return reviews;
+            try
+            {
+                var reviews = reviewRepository.GetReviewsByReviewer(reviewerId);
+                if (reviews == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpGet]
-        [Route("GetReviewsByFuelStation/{stationId}")]
-        public IEnumerable<Review> GetReviewsByFuelStation(Guid stationId)
+        [Route("GetReviewsByFuelStation")]
+        public IActionResult GetReviewsByFuelStation(Guid stationId)
         {
-            var reviews = reviewRepository.GetReviewsByFuelStation(stationId);
-            return reviews;
+            try
+            {
+                var reviews = reviewRepository.GetReviewsByFuelStation(stationId);
+                if (reviews == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(reviews);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpPost]
         [Route("AddNewReview")]
-        public async Task<Review> AddNewReview(Review review)
+        public async Task<IActionResult> AddNewReview(Review review)
         {
-            var result = await reviewRepository.AddReviewAsync(review);
-            return result;
+            try
+            {
+                var result = await reviewRepository.AddReviewAsync(review);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpPut]
         [Route("UpdateReview")]
-        public async Task<Review> UpdateReview(Review review)
+        public async Task<IActionResult> UpdateReview(Review review)
         {
-            var result = await reviewRepository.UpdateReview(review);
-            return result;
+            try
+            {
+                var result = await reviewRepository.UpdateReview(review);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpDelete]
         [Route("DeleteReview")]
-        public async Task<string> DeleteReview(Review review)
+        public async Task<IActionResult> DeleteReview(Review review)
         {
-            var result = await reviewRepository.DeleteReview(review);
-            return result;
+            try
+            {
+                var result = await reviewRepository.DeleteReview(review);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
     }
 }

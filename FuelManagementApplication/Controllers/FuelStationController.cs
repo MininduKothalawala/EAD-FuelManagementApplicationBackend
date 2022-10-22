@@ -1,6 +1,8 @@
 ﻿using FuelManagementApplication.IRepositories;
 using FuelManagementApplication.Models;
+using FuelManagementApplication.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -19,34 +21,88 @@ namespace FuelManagementApplication.Controllers
 
         [HttpGet]
         [Route("GetAllStations")]
-        public IEnumerable<FuelStation> GetAllStations()
+        public IActionResult GetAllStations()
         {
-            var fuelStations = fuelStationRepository.GetStations();
-            return fuelStations;
+            try
+            {
+                var fuelStations = fuelStationRepository.GetStations();
+
+                if(fuelStations == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(fuelStations);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpGet]
+        [Route("GetStationById")]
+        public IActionResult GetStationById(Guid id)
+        {
+            try
+            {
+                var fuelStation = fuelStationRepository.GetStationById(id);
+
+                if (fuelStation == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(fuelStation);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+
         }
 
         [HttpPost]
         [Route("AddNewStation")]
-        public async Task<FuelStation> AddNewStation(FuelStation fuelStation)
+        public async Task<IActionResult> AddNewStation(FuelStation fuelStation)
         {
-            var station = await fuelStationRepository.AddStationAsync(fuelStation);
-            return station;
+            try
+            {
+                var station = await fuelStationRepository.AddStationAsync(fuelStation);
+                return Ok(station);
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpPut]
         [Route("UpdateStation")]
-        public async Task<FuelStation> UpdateStation(FuelStation fuelStation)
+        public async Task<IActionResult> UpdateStation(FuelStation fuelStation)
         {
-            var station = await fuelStationRepository.UpdateStation(fuelStation);
-            return station;
+            try
+            {
+                var station = await fuelStationRepository.UpdateStation(fuelStation);
+                return Ok(station);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpDelete]
         [Route("DeleteStation")]
-        public async Task<string> DeleteStation(FuelStation fuelStation)
+        public async Task<IActionResult> DeleteStation(FuelStation fuelStation)
         {
-            var station = await fuelStationRepository.DeleteStation(fuelStation);
-            return station;
+            try
+            {
+                var station = await fuelStationRepository.DeleteStation(fuelStation);
+                return Ok(station);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
     }
 }

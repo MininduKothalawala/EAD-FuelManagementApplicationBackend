@@ -13,5 +13,6 @@ namespace FuelManagementApplication.Models
         public int NumberOfPetrolVehicalsInQueue { get; set; }
         public int NumberOfDeselVehicalsInQueue { get; set; }
         public float AvarageTimeInQueue { get; set; }
+        public int TotalNumberOfVehicalsGotFuel { get; set; }
     }
 }
