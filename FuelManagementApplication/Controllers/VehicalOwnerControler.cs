@@ -1,5 +1,6 @@
 ﻿using FuelManagementApplication.IRepositories;
 using FuelManagementApplication.Models;
+using FuelManagementApplication.Utilities;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -21,34 +22,66 @@ namespace FuelManagementApplication.Controllers
 
         [HttpGet]
         [Route("GetAllVehicalOwners")]
-        public IEnumerable<VehicalOwner> GetAllStations()
+        public IActionResult GetAllStations()
         {
-            var vehicalOwners = vehicalOwnerRepository.GetVehicalOwners();
-            return vehicalOwners;
+            try
+            {
+                var vehicalOwners = vehicalOwnerRepository.GetVehicalOwners();
+                if (vehicalOwners == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(vehicalOwners);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpPost]
         [Route("AddNewVehicalOwner")]
-        public async Task<VehicalOwner> AddNewVehicalOwner(VehicalOwner vehicalOwner)
+        public async Task<IActionResult> AddNewVehicalOwner(VehicalOwner vehicalOwner)
         {
-            var result = await vehicalOwnerRepository.AddVehicalOwnerAsync(vehicalOwner);
-            return result;
+            try
+            {
+                var result = await vehicalOwnerRepository.AddVehicalOwnerAsync(vehicalOwner);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpPut]
         [Route("UpdateVehicalOwner")]
-        public async Task<VehicalOwner> UpdateVehicalOwner(VehicalOwner vehicalOwner)
+        public async Task<IActionResult> UpdateVehicalOwner(VehicalOwner vehicalOwner)
         {
-            var result = await vehicalOwnerRepository.UpdateVehicalOwner(vehicalOwner);
-            return result;
+            try
+            {
+                var result = await vehicalOwnerRepository.UpdateVehicalOwner(vehicalOwner);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
 
         [HttpDelete]
         [Route("DeleteVehicalOwner")]
-        public async Task<string> DeleteVehicalOwner(VehicalOwner vehicalOwner)
+        public async Task<IActionResult> DeleteVehicalOwner(VehicalOwner vehicalOwner)
         {
-            var result = await vehicalOwnerRepository.DeleteVehicalOwner(vehicalOwner);
-            return result;
+            try
+            {
+                var result = await vehicalOwnerRepository.DeleteVehicalOwner(vehicalOwner);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
         }
     }
 }
