@@ -18,6 +18,8 @@ namespace FuelManagementApplication.Repositories
             this.configuration = configuration;
         }
 
+        //Add new vehicle user details
+        //Using in registration
         public async Task<VehicalOwner> AddVehicalOwnerAsync(VehicalOwner vehicalOwner)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -26,6 +28,7 @@ namespace FuelManagementApplication.Repositories
             return vehicalOwner;
         }
 
+        //Delete user
         public async Task<string> DeleteVehicalOwner(VehicalOwner vehicalOwner)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -35,6 +38,7 @@ namespace FuelManagementApplication.Repositories
             return "Successfully Deleted";
         }
 
+        //Get all vehicle users
         public List<VehicalOwner> GetVehicalOwners()
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -43,6 +47,7 @@ namespace FuelManagementApplication.Repositories
             return reviews;
         }
 
+        //Update vehicle user details
         public async Task<VehicalOwner> UpdateVehicalOwner(VehicalOwner vehicalOwner)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));

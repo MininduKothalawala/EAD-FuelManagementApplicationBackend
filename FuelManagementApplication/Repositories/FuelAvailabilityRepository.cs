@@ -18,6 +18,7 @@ namespace FuelManagementApplication.Repositories
             this.configuration = configuration;
         }
 
+        //Add new record
         public async Task<FuelAvailability> AddNewRecord(FuelAvailability fuelAvailability)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -26,6 +27,7 @@ namespace FuelManagementApplication.Repositories
             return fuelAvailability;
         }
 
+        //Get record by id
         public async Task<FuelAvailability> GetRecordByStationId(Guid stationId)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -34,6 +36,8 @@ namespace FuelManagementApplication.Repositories
             return fuelAvailabilitie;
         }
 
+        //Using when trigger when user join to fuel queue.
+        //It automaticaly increse fuel queue vehicle count.
         public async Task<FuelAvailability> UpdateRecordByVehicalOwnerIn(FuelAvailabilityViewModel fuelAvailabilityView)
         {
             //Get Fuel Availability
@@ -60,6 +64,9 @@ namespace FuelManagementApplication.Repositories
             return fuelAvailability;
         }
 
+        //Using when trigger when user leave the fuel queue.
+        //It automaticaly decrese fuel queue vehicle count.
+        //It automaticaly calculate avarage time spent in queue.
         public async Task<FuelAvailability> UpdateRecordByVehicalOwnerOut(FuelAvailabilityViewModel fuelAvailabilityView)
         {
             //Get Fuel Availability
