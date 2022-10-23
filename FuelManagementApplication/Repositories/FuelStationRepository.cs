@@ -19,6 +19,7 @@ namespace FuelManagementApplication.Repositories
             this.configuration = configuration;
         }
 
+        //Add station details
         public async Task<FuelStation> AddStationAsync(FuelStation fuelStation)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -27,6 +28,7 @@ namespace FuelManagementApplication.Repositories
             return fuelStation;
         }
 
+        //Get all stations as list
         public List<FuelStation> GetStations()
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -35,6 +37,7 @@ namespace FuelManagementApplication.Repositories
             return fuelStations;
         }
 
+        //Get fuel station details by id
         public List<FuelStation> GetStationById(Guid stationId)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -43,6 +46,7 @@ namespace FuelManagementApplication.Repositories
             return fuelStations;
         }
 
+        //Update fuel station details
         public async Task<FuelStation> UpdateStation(FuelStation fuelStation)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -52,6 +56,7 @@ namespace FuelManagementApplication.Repositories
             return fuelStation;
         }
 
+        //Delete fuel station details
         public async Task<string> DeleteStation(FuelStation fuelStation)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));

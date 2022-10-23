@@ -18,6 +18,8 @@ namespace FuelManagementApplication.Repositories
             this.configuration = configuration;
         }
 
+        //Add new record
+        //This will trigger when user join to the queue
         public async Task<FuelQueue> AddNewRecord(FuelQueue fuelQueue)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
@@ -26,6 +28,7 @@ namespace FuelManagementApplication.Repositories
             return fuelQueue;
         }
 
+        //Trigger this one when user leave the queue
         public async Task<FuelQueue> MarkOutTime(FuelQueue fuelQueue)
         {
             //Get time spent in queue
