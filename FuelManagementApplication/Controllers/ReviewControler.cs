@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace FuelManagementApplication.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/ReviewController/")]
     public class ReviewControler : ControllerBase
     {
         private readonly IReviewRepository reviewRepository;
