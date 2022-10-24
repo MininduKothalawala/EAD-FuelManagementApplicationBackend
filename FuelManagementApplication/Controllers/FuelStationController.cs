@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace FuelManagementApplication.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("/FuelStationController/")]
     public class FuelStationController : ControllerBase
     {
         private readonly IFuelStationRepository fuelStationRepository;
