@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace FuelManagementApplication.Controllers
 {
     [ApiController]
-    [Route("/VehicleOwnerController/")]
+    [Route("/VehicleOwner/")]
     public class VehicalOwnerControler : ControllerBase
     {
         private readonly IVehicalOwnerRepository vehicalOwnerRepository;
