@@ -75,7 +75,7 @@ namespace FuelManagementApplication.Repositories
 
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             var filter = Builders<FuelAvailability>.Filter.Eq("Username", fuelStatus.StationName);
-            await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelAvailability>("FuelStation").ReplaceOneAsync(filter, availability);
+            await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelAvailability>("FuelAvailability").ReplaceOneAsync(filter, availability);
 
             return availability;
         }
