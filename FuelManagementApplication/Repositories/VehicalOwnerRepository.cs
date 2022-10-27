@@ -47,6 +47,15 @@ namespace FuelManagementApplication.Repositories
             return reviews;
         }
 
+        //Get record by username
+        public async Task<VehicalOwner> GetVehicleOwnerByUserName(string username)
+        {
+            MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
+            var results = mongoClient.GetDatabase("FuelManagementDb").GetCollection<VehicalOwner>("VehicalOwner").AsQueryable();
+            var vehicleOwner = results.Where(x => x.Username == username).FirstOrDefault();
+            return vehicleOwner;
+        }
+
         //Update vehicle user details
         public async Task<VehicalOwner> UpdateVehicalOwner(VehicalOwner vehicalOwner)
         {

@@ -1,6 +1,7 @@
 ﻿using FuelManagementApplication.IRepositories;
 using FuelManagementApplication.Models;
 using FuelManagementApplication.Utilities;
+using FuelManagementApplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -13,10 +14,13 @@ namespace FuelManagementApplication.Controllers
     public class FuelStationController : ControllerBase
     {
         private readonly IFuelStationRepository fuelStationRepository;
+        private readonly IFuelAvailabilityRepository fuelAvailabilityRepository;
 
-        public FuelStationController(IFuelStationRepository fuelStationRepository)
+        public FuelStationController(IFuelStationRepository fuelStationRepository, 
+            IFuelAvailabilityRepository fuelAvailabilityRepository)
         {
             this.fuelStationRepository = fuelStationRepository;
+            this.fuelAvailabilityRepository = fuelAvailabilityRepository;
         }
 
         [HttpGet]
@@ -60,6 +64,48 @@ namespace FuelManagementApplication.Controllers
 
         }
 
+        [HttpGet]
+        [Route("GetStationByUsername")]
+        public IActionResult GetStationByUserName(string username)
+        {
+            try
+            {
+                var fuelStation = fuelStationRepository.GetStationByUserName(username);
+
+                if (fuelStation == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(fuelStation);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+
+        }
+
+        [HttpGet]
+        [Route("GetAvailabillityById")]
+        public IActionResult GetFuelAvailabilityByStationById(Guid id)
+        {
+            try
+            {
+                var fuelAvailability = fuelAvailabilityRepository.GetRecordByStationId(id);
+
+                if (fuelAvailability == null)
+                {
+                    return Ok(Constant.NoRecordFound);
+                }
+                return Ok(fuelAvailability);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+
+        }
+
         [HttpPost]
         [Route("AddNewStation")]
         public async Task<IActionResult> AddNewStation(FuelStation fuelStation)
@@ -82,6 +128,21 @@ namespace FuelManagementApplication.Controllers
             try
             {
                 var station = await fuelStationRepository.UpdateStation(fuelStation);
+                return Ok(station);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
+        [HttpPut]
+        [Route("UpdateFuelStatus")]
+        public async Task<IActionResult> UpdateFuelStatus(FuelStatusViewModel fuelStatus)
+        {
+            try
+            {
+                var station = await fuelAvailabilityRepository.UpdateFuelStatus(fuelStatus);
                 return Ok(station);
             }
             catch (Exception ex)

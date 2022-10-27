@@ -39,6 +39,21 @@ namespace FuelManagementApplication.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("UpdateVehicalOwner")]
+        public async Task<IActionResult> GetVehicleOwnerByUsername(string username)
+        {
+            try
+            {
+                var result = await vehicalOwnerRepository.GetVehicleOwnerByUserName(username);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message.ToString());
+            }
+        }
+
         [HttpPost]
         [Route("AddNewVehicalOwner")]
         public async Task<IActionResult> AddNewVehicalOwner(VehicalOwner vehicalOwner)
