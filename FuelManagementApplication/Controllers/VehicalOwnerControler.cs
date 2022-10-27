@@ -40,7 +40,7 @@ namespace FuelManagementApplication.Controllers
         }
 
         [HttpGet]
-        [Route("UpdateVehicalOwner")]
+        [Route("GetVehicleOwnerByUsername")]
         public async Task<IActionResult> GetVehicleOwnerByUsername(string username)
         {
             try

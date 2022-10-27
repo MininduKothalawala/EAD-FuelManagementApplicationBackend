@@ -39,6 +39,8 @@ namespace FuelManagementApplication
             services.AddScoped<IFuelStationRepository, FuelStationRepository>();
             services.AddScoped<IReviewRepository, ReviewRepository>();
             services.AddScoped<IVehicalOwnerRepository, VehicalOwnerRepository>();
+            services.AddScoped<IFuelAvailabilityRepository, FuelAvailabilityRepository>();
+            services.AddScoped<IFuelQueueRepository, FuelQueueRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
