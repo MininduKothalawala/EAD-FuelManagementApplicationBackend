@@ -48,7 +48,7 @@ namespace FuelManagementApplication.Repositories
         //Update fuel station fuel status details
         public async Task<FuelAvailability> UpdateFuelStatus(FuelStatusViewModel fuelStatus)
         {
-            FuelAvailability availability = await GetRecordByStationId(fuelStatus.StationId);
+            FuelAvailability availability = await GetRecordByStationUserName(fuelStatus.StationName);
 
             if (fuelStatus.fuelFinished && !fuelStatus.fuelArrived)
             {
@@ -74,7 +74,7 @@ namespace FuelManagementApplication.Repositories
             }
 
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
-            var filter = Builders<FuelAvailability>.Filter.Eq("StationId", fuelStatus.StationId);
+            var filter = Builders<FuelAvailability>.Filter.Eq("Username", fuelStatus.StationName);
             await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelAvailability>("FuelStation").ReplaceOneAsync(filter, availability);
 
             return availability;
