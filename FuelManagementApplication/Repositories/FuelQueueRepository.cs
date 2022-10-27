@@ -25,6 +25,7 @@ namespace FuelManagementApplication.Repositories
         //This will trigger when user join to the queue
         public async Task<FuelQueue> AddNewRecord(FuelQueue fuelQueue)
         {
+            fuelQueue.InTime = DateTime.UtcNow;
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelQueue>("FuelQueue").InsertOneAsync(fuelQueue);
 
@@ -40,6 +41,7 @@ namespace FuelManagementApplication.Repositories
         //Trigger this one when user leave the queue
         public async Task<FuelQueue> MarkOutTime(FuelQueue fuelQueue)
         {
+            fuelQueue.OutTime = DateTime.UtcNow;
             //Get time spent in queue
             TimeSpan ts = (TimeSpan)(fuelQueue.OutTime - fuelQueue.InTime);
             fuelQueue.TimeSpentInQueue = (float)ts.TotalHours;

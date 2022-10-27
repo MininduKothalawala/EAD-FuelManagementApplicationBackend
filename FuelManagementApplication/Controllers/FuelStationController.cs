@@ -87,11 +87,11 @@ namespace FuelManagementApplication.Controllers
 
         [HttpGet]
         [Route("GetAvailabillityById")]
-        public IActionResult GetFuelAvailabilityByStationById(Guid id)
+        public async Task<IActionResult> GetFuelAvailabilityByStationById(Guid id)
         {
             try
             {
-                var fuelAvailability = fuelAvailabilityRepository.GetRecordByStationId(id);
+                var fuelAvailability = await fuelAvailabilityRepository.GetRecordByStationId(id);
 
                 if (fuelAvailability == null)
                 {
