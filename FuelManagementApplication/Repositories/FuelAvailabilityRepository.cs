@@ -36,6 +36,15 @@ namespace FuelManagementApplication.Repositories
             return fuelAvailabilitie;
         }
 
+        //Get record by id
+        public async Task<FuelAvailability> GetRecordByStationUserName(string stationUserName)
+        {
+            MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
+            var results = mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelAvailability>("FuelAvailability").AsQueryable();
+            var fuelAvailabilitie = results.Where(x => x.Username == stationUserName).FirstOrDefault();
+            return fuelAvailabilitie;
+        }
+
         //Update fuel station fuel status details
         public async Task<FuelAvailability> UpdateFuelStatus(FuelStatusViewModel fuelStatus)
         {
