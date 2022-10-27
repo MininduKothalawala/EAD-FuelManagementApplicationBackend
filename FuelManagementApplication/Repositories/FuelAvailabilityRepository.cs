@@ -36,6 +36,41 @@ namespace FuelManagementApplication.Repositories
             return fuelAvailabilitie;
         }
 
+        //Update fuel station fuel status details
+        public async Task<FuelAvailability> UpdateFuelStatus(FuelStatusViewModel fuelStatus)
+        {
+            FuelAvailability availability = await GetRecordByStationId(fuelStatus.StationId);
+
+            if (fuelStatus.fuelFinished && !fuelStatus.fuelArrived)
+            {
+                if(fuelStatus.FuelType == "Petrol")
+                {
+                    availability.IsPetrolAvailable = false;
+                }
+                else if(fuelStatus.FuelType == "Desel")
+                {
+                    availability.IsDeselAvailable = false;
+                }
+            }
+            else if(!fuelStatus.fuelFinished && fuelStatus.fuelArrived)
+            {
+                if (fuelStatus.FuelType == "Petrol")
+                {
+                    availability.IsPetrolAvailable = true;
+                }
+                else if (fuelStatus.FuelType == "Desel")
+                {
+                    availability.IsDeselAvailable = true;
+                }
+            }
+
+            MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
+            var filter = Builders<FuelAvailability>.Filter.Eq("StationId", fuelStatus.StationId);
+            await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelAvailability>("FuelStation").ReplaceOneAsync(filter, availability);
+
+            return availability;
+        }
+
         //Using when trigger when user join to fuel queue.
         //It automaticaly increse fuel queue vehicle count.
         public async Task<FuelAvailability> UpdateRecordByVehicalOwnerIn(FuelAvailabilityViewModel fuelAvailabilityView)
@@ -48,11 +83,11 @@ namespace FuelManagementApplication.Repositories
                 return null;
             }
             //Update Record by vehical details
-            if(fuelAvailabilityView.FuelType == FuelTypes.Desel)
+            if(fuelAvailabilityView.FuelType == "Desel")
             {
                 fuelAvailability.NumberOfDeselVehicalsInQueue = fuelAvailability.NumberOfDeselVehicalsInQueue + 1;
             }
-            else if (fuelAvailabilityView.FuelType == FuelTypes.Petrol)
+            else if (fuelAvailabilityView.FuelType == "Petrol")
             {
                 fuelAvailability.NumberOfPetrolVehicalsInQueue = fuelAvailability.NumberOfPetrolVehicalsInQueue + 1;
             }
@@ -83,11 +118,11 @@ namespace FuelManagementApplication.Repositories
 
             fuelAvailability.TotalNumberOfVehicalsGotFuel = fuelAvailability.TotalNumberOfVehicalsGotFuel + 1;
 
-            if (fuelAvailabilityView.FuelType == FuelTypes.Desel)
+            if (fuelAvailabilityView.FuelType == "Desel")
             {
                 fuelAvailability.NumberOfDeselVehicalsInQueue = fuelAvailability.NumberOfDeselVehicalsInQueue - 1;
             }
-            else if (fuelAvailabilityView.FuelType == FuelTypes.Petrol)
+            else if (fuelAvailabilityView.FuelType == "Petrol")
             {
                 fuelAvailability.NumberOfPetrolVehicalsInQueue = fuelAvailability.NumberOfPetrolVehicalsInQueue - 1;
             }

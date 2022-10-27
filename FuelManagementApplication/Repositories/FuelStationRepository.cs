@@ -1,5 +1,6 @@
 ﻿using FuelManagementApplication.IRepositories;
 using FuelManagementApplication.Models;
+using FuelManagementApplication.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
@@ -25,6 +26,12 @@ namespace FuelManagementApplication.Repositories
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelStation>("FuelStation").InsertOneAsync(fuelStation);
             
+            FuelAvailability fuelAvailability = new FuelAvailability();
+            fuelAvailability.StationId = fuelStation.Id;
+            fuelAvailability.Username = fuelStation.Username;
+
+            await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelAvailability>("FuelAvailability").InsertOneAsync(fuelAvailability);
+
             return fuelStation;
         }
 
@@ -43,6 +50,15 @@ namespace FuelManagementApplication.Repositories
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             var results = mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelStation>("FuelStation").AsQueryable();
             List<FuelStation> fuelStations = results.Where(x => x.Id == stationId).ToList();
+            return fuelStations;
+        }
+
+        //Get fuel station details by username
+        public List<FuelStation> GetStationByUserName(string username)
+        {
+            MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
+            var results = mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelStation>("FuelStation").AsQueryable();
+            List<FuelStation> fuelStations = results.Where(x => x.Username == username).ToList();
             return fuelStations;
         }
 

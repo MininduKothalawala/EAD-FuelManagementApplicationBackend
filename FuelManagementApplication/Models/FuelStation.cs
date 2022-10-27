@@ -11,6 +11,7 @@ namespace FuelManagementApplication.Models
     {
         [BsonId]
         public Guid Id { get; set; }
+        public string Username { get; set; }
         public string StationName { get; set; }
         public string Address { get; set; }
     }

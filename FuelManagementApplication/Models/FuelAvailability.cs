@@ -8,6 +8,7 @@ namespace FuelManagementApplication.Models
         [BsonId]
         public Guid Id { get; set; }
         public Guid StationId { get; set; }
+        public string Username { get; set; }
         public bool IsPetrolAvailable { get; set; }
         public bool IsDeselAvailable { get; set; }
         public int NumberOfPetrolVehicalsInQueue { get; set; }

@@ -1,5 +1,6 @@
 ﻿using FuelManagementApplication.IRepositories;
 using FuelManagementApplication.Models;
+using FuelManagementApplication.ViewModels;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
 using System;
@@ -12,10 +13,12 @@ namespace FuelManagementApplication.Repositories
     public class FuelQueueRepository : IFuelQueueRepository
     {
         private readonly IConfiguration configuration;
+        private readonly IFuelAvailabilityRepository fuelAvailabilityRepository;
 
-        public FuelQueueRepository(IConfiguration configuration)
+        public FuelQueueRepository(IConfiguration configuration, IFuelAvailabilityRepository fuelAvailabilityRepository)
         {
             this.configuration = configuration;
+            this.fuelAvailabilityRepository = fuelAvailabilityRepository;
         }
 
         //Add new record
@@ -24,6 +27,12 @@ namespace FuelManagementApplication.Repositories
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelQueue>("FuelQueue").InsertOneAsync(fuelQueue);
+
+            FuelAvailabilityViewModel fuelAvailabilityViewModel = new FuelAvailabilityViewModel();
+            fuelAvailabilityViewModel.StationId = fuelQueue.StationId;
+            fuelAvailabilityViewModel.FuelType = fuelQueue.FuelType;
+
+            await fuelAvailabilityRepository.UpdateRecordByVehicalOwnerIn(fuelAvailabilityViewModel);
 
             return fuelQueue;
         }
@@ -38,6 +47,13 @@ namespace FuelManagementApplication.Repositories
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             var filter = Builders<FuelQueue>.Filter.Eq("Id", fuelQueue.Id);
             await mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelQueue>("FuelQueue").ReplaceOneAsync(filter, fuelQueue);
+
+            FuelAvailabilityViewModel fuelAvailabilityViewModel = new FuelAvailabilityViewModel();
+            fuelAvailabilityViewModel.StationId = fuelQueue.StationId;
+            fuelAvailabilityViewModel.FuelType = fuelQueue.FuelType;
+            fuelAvailabilityViewModel.TimeSpentInQueue = fuelQueue.TimeSpentInQueue;
+
+            await fuelAvailabilityRepository.UpdateRecordByVehicalOwnerOut(fuelAvailabilityViewModel);
 
             return fuelQueue;
         }
