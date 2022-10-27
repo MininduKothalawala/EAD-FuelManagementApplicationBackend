@@ -54,12 +54,12 @@ namespace FuelManagementApplication.Repositories
         }
 
         //Get fuel station details by username
-        public List<FuelStation> GetStationByUserName(string username)
+        public async Task<FuelStation> GetStationByUserName(string username)
         {
             MongoClient mongoClient = new MongoClient(configuration.GetConnectionString("MongoDbConnectionString"));
             var results = mongoClient.GetDatabase("FuelManagementDb").GetCollection<FuelStation>("FuelStation").AsQueryable();
-            List<FuelStation> fuelStations = results.Where(x => x.Username == username).ToList();
-            return fuelStations;
+            var fuelStation = results.Where(x => x.Username == username).FirstOrDefault();
+            return fuelStation;
         }
 
         //Update fuel station details

@@ -66,11 +66,11 @@ namespace FuelManagementApplication.Controllers
 
         [HttpGet]
         [Route("GetStationByUsername")]
-        public IActionResult GetStationByUserName(string username)
+        public async Task<IActionResult> GetStationByUserNameAsync(string username)
         {
             try
             {
-                var fuelStation = fuelStationRepository.GetStationByUserName(username);
+                var fuelStation = await fuelStationRepository.GetStationByUserName(username);
 
                 if (fuelStation == null)
                 {
